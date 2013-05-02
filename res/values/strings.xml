@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Lenit</string>
+    <string name="action_settings">设置</string>
+    <string name="action_login">登陆</string>
+    <string name="action_logout">注销</string>
+    <string-array name="titles_section">
+        <item >主页</item>
+        <item >活动中心</item>
+        <item >随便逛逛</item>
+    </string-array>
+    <string name="action_calendar">日历</string>
+
+</resources>

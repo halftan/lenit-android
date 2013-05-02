@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <PreferenceCategory android:title="Dummm"><CheckBoxPreference android:title="Dummy" android:key="@+id/prefs_dummy"/><EditTextPreference android:key="@+id/prefs_edit" android:title="DummyEdit" /></PreferenceCategory>
+    
+
+</PreferenceScreen>

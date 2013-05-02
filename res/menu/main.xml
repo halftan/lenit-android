@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/action_settings" android:showAsAction="ifRoom|withText" android:icon="@android:drawable/ic_menu_preferences"/>
+    <item android:id="@+id/action_session" android:title="@string/action_login"></item>
+    <item android:id="@+id/action_calendar" android:title="@string/action_calendar" android:icon="@android:drawable/ic_menu_my_calendar" android:showAsAction="ifRoom|withText"></item>
+
+</menu>
