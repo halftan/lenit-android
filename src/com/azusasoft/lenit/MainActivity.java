@@ -3,10 +3,12 @@ package com.azusasoft.lenit;
 import java.util.Locale;
 
 import android.app.ActionBar;
+import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -98,8 +100,11 @@ public class MainActivity extends FragmentActivity implements
 			Log.d(TAG, "Not implemented----Calendar");
 			break;
 		case R.id.action_session:
-			Log.d(TAG, "Not implemented----Session");
+			DialogFragment dlg = new LoginDialogFragment();
+			dlg.show(getSupportFragmentManager(), "Login_Dialog");
 			break;
+		case R.id.action_exit:
+			finish();
 		}
 		
 		return true;
@@ -150,8 +155,8 @@ public class MainActivity extends FragmentActivity implements
 			// below) with the page number as its lone argument.
 			switch (position) {
 			case 0:
-				Fragment homePage = new HomePageSectionFragment();
-				return homePage;
+//				if (((LenitApplication)getApplication()).userLoggedIn())
+				return new HomePageSectionFragment();
 			}
 			Fragment fragment = new DummySectionFragment();
 			Bundle args = new Bundle();
@@ -182,7 +187,7 @@ public class MainActivity extends FragmentActivity implements
 	public static class DummySectionFragment extends Fragment {
 		/**
 		 * The fragment argument representing the section number for this
-		 * fragmen.
+		 * fragment.
 		 */
 		
 		// TODO rewrite this class
