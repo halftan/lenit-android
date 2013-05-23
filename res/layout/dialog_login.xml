@@ -10,12 +10,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left|center_vertical"
 		android:text="@string/action_login"
-		android:layout_marginTop="4dp"
+		android:layout_marginTop="10dp"
 		android:layout_marginBottom="4dp"
-        android:layout_marginLeft="8dp"
-        android:textSize="20sp" />
+        android:layout_marginLeft="16dp"
+        android:textSize="18sp"
+        android:textColor="#ff33b5e5" />
     
-    <View style="@style/separator" />
+    <View style="@style/separator" 
+        android:layout_marginTop="10dp"/>
     
     <EditText
         android:id="@+id/email"
