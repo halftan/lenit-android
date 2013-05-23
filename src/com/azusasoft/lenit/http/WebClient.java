@@ -14,8 +14,8 @@ import android.widget.Toast;
 
 import com.azusasoft.lenit.LenitApplication;
 import com.azusasoft.lenit.LoginDialogFragment;
-import com.azusasoft.lenit.R;
 import com.azusasoft.lenit.error.RestApiException;
+import com.azusasoft.lenit.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -24,18 +24,23 @@ import com.loopj.android.http.RequestParams;
 public class WebClient {
 	public static final String TAG = "WebService";
 	
-	private static final String BASE_URL = "http://192.168.244.128:3000";
+	private static final String BASE_URL = "http://192.168.244.135:3000";
 	private static String userAgent = "Lenit-Application-Client";
-	public static String apiRoot = "http://192.168.244.128:3000/api";
+	public static String apiRoot = BASE_URL + "/api";
 	public static String apiSession = "/sessions";
+	public static String apiSessionValidate = "/sessions/validate";
+	
+	public static String JSON_AUTH_TOKEN = "auth_token";
+	public static String JSON_USERNAME = "username";
+	public static String JSON_EMAIL = "email";
+	public static String JSON_PASSWD = "password";
 
 	// private static String formatUserLogin =
 	// "\"email\":\"%s\",\"password\":\"%s\"";
 
 	private static AsyncHttpClient mClient = new AsyncHttpClient();
 
-	public WebClient() {
-	}
+	public WebClient() {}
 
 	public static void get(String url, RequestParams params,
 			AsyncHttpResponseHandler responseHandler) {
@@ -53,44 +58,13 @@ public class WebClient {
 	
 	public static void UserLogin(String email, String password, FragmentActivity activity) {
 		RequestParams params = new RequestParams();
-		params.put("email", email);
-		params.put("password", password);
-		WebClient.post("/sessions", params, new WebClient.SessionHandler(activity));
+		params.put(JSON_EMAIL, email);
+		params.put(JSON_PASSWD, password);
+		WebClient.post(apiSession, params, new SessionHandler(activity));
 	}
-
-	public static class SessionHandler extends JsonHttpResponseHandler {
-		private FragmentActivity mActivity;
-		
-		public SessionHandler(FragmentActivity context) {
-			super();
-			mActivity = context;
-		}
-		
-		@Override
-		public void onSuccess(JSONObject result) {
-			String token = null;
-			try {
-				token = result.getString("auth_token");
-				Log.i(TAG, token);
-			} catch (JSONException e) {
-				Log.e("WebService", e.getMessage());
-				Toast.makeText(mActivity, R.string.error_login_failed, Toast.LENGTH_SHORT).show();
-				return;
-			}
-			LenitApplication.getInstance().setToken(token);
-		}
-
-		@Override
-		public void onFailure(Throwable e, JSONObject result) {
-			if (e.getMessage().endsWith("Unauthorized")) {
-				Toast.makeText(mActivity, R.string.error_unauthorized, Toast.LENGTH_SHORT).show();
-				DialogFragment dlg = new LoginDialogFragment();
-				dlg.show(mActivity.getSupportFragmentManager(), "Login_Dialog");
-			}
-		}
-		
-		
-	}
+	
+	
+	
 	
 	public static class SetTextHandler extends JsonHttpResponseHandler {
 		private TextView mTarget;
@@ -109,7 +83,8 @@ public class WebClient {
 
 		@Override
 		public void onFailure(Throwable e, JSONObject result) {
-			Log.e(TAG, "Error fetching event info");
+			Toast.makeText(mTarget.getContext(), R.string.error_unauthorized, Toast.LENGTH_SHORT).show();
+			Log.e(TAG, "Error fetching event info\n" + e.getMessage());
 		}
 		
 		
