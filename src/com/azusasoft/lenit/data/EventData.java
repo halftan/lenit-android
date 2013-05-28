@@ -18,7 +18,8 @@ public class EventData{
 	
 	static final String DB_NAME = "event.db";
 	static final int DB_VERSION = 1;
-	static final String TABLE = "event";
+	
+	public static final String TABLE = "event";
 	
 	public static final String C_ID = BaseColumns._ID; 
 	public static final String C_CREATED_AT = "created_at";
@@ -26,19 +27,23 @@ public class EventData{
 	public static final String C_DESCRIPTION = "description";
 	public static final String C_TIME = "time";
 	public static final String C_DURATION = "duration";
-	public static final String C_HOST_NAME = "host_name"; 
+	public static final String C_HOST_NAME = "host_name";
+	public static final String C_LOCATION = "location";
 	
-	private static final String GET_ALL_ORDER_BY = C_CREATED_AT + " DESC";
+	public static final String GET_ALL_ORDER_BY = C_CREATED_AT + " DESC";
 	
-	private static final String[] MAX_CREATED_AT_COLUMNS = {
+	public static final String[] MAX_CREATED_AT_COLUMNS = {
 		"max(" + EventData.C_CREATED_AT + ")"
 	};
+	public static final String[] MAX_ID_COLUMNS = {
+		"max(" + EventData.C_ID + ")"
+	};
 	
-	private static final String[] DB_EVENT_COLUMNS = {
-		C_CREATED_AT, C_NAME, C_DESCRIPTION, C_TIME, C_DURATION, C_HOST_NAME
+	public static final String[] DB_EVENT_COLUMNS = {
+		C_CREATED_AT, C_NAME, C_DESCRIPTION, C_TIME, C_DURATION, C_HOST_NAME, C_LOCATION
 	};
 
-	class DbHelper extends SQLiteOpenHelper {
+	public static class DbHelper extends SQLiteOpenHelper {
 		static final String TAG = "DbHelper";
 		Context mContext;
 	
@@ -50,10 +55,12 @@ public class EventData{
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			String sql = String.format("create table %s (" +
-					"%s int primary key, %s datetimes, " +
+					"%s int primary key, %s varchar(255), " +
 					"%s varchar(255), %s text, " +
-					"%s datetimes, %s integer, %s varchar(255))", TABLE, C_ID, C_CREATED_AT,
-					C_NAME, C_DESCRIPTION, C_TIME, C_DURATION, C_HOST_NAME);
+					"%s varchar(255), %s integer, %s varchar(255), " +
+					"%s varchar(255))", TABLE, C_ID, C_CREATED_AT,
+					C_NAME, C_DESCRIPTION, C_TIME, C_DURATION, C_HOST_NAME,
+					C_LOCATION);
 			
 			db.execSQL(sql);
 			Log.d(TAG, "onCreated sql: " + sql);
@@ -95,11 +102,24 @@ public class EventData{
 	
 	/**
 	 * 
-	 * @return Cursor, 可访问列为:created_at, name, description, time, duration, host_name
+	 * @return Cursor, 可访问列为:created_at, name, description, time, duration, host_name, location
 	 */
 	public Cursor getEventUpdates() {
 		SQLiteDatabase db = mDbHelper.getReadableDatabase();
 		return db.query(TABLE, null, null, null, null, null, GET_ALL_ORDER_BY);
+	}
+	
+	/**
+	 * 
+	 * @return Cursor, 可访问列为:created_at, name, description, time, duration, host_name, location
+	 */
+	public Cursor getEventUpdatesLaterThan(int id) {
+		if (id != 0) {
+			SQLiteDatabase db = mDbHelper.getReadableDatabase();
+			String[] selectionArgs = {String.valueOf(id)};
+			return db.query(TABLE, null, C_ID + " > ?", selectionArgs, null, null, GET_ALL_ORDER_BY);	
+		}
+		else return getEventUpdates();
 	}
 	
 	/**
@@ -124,9 +144,25 @@ public class EventData{
 	}
 	
 	/**
-	 * COLUMNS 顺序
-	 *      0          1        2              3         4          5
-	 * C_CREATED_AT, C_NAME, C_DESCRIPTION, C_TIME, C_DURATION, C_HOST_NAME
+	 * 
+	 * @return int, 数据库中最后一条记录的id
+	 */
+	public Integer getLatestEventId() {
+		SQLiteDatabase db = mDbHelper.getReadableDatabase();
+		try {
+			Cursor cursor = db.query(TABLE, MAX_ID_COLUMNS, null, null, null, null, null);
+			try {
+				return cursor.moveToNext() ? cursor.getInt(0) : 0;
+			} finally {
+				cursor.close();
+			}
+		} finally {
+			db.close();
+		}
+	}
+	
+	/**
+	 *
 	 * @param 目标Event的id
 	 * @return 目标Event的详细信息
 	 */
@@ -138,12 +174,13 @@ public class EventData{
 			try {
 				if (cursor.moveToNext()) {
 					event.put(Event.M_ID, String.valueOf(id));
-					event.put(Event.M_CREATED_AT, cursor.getString(0));
-					event.put(Event.M_NAME, cursor.getString(1));
-					event.put(Event.M_DESCRIPTION, cursor.getString(2));
-					event.put(Event.M_TIME, cursor.getString(3));
-					event.put(Event.M_DURATION, cursor.getString(4));
-					event.put(Event.M_HOST_NAME, cursor.getString(5));
+					event.put(Event.M_CREATED_AT, cursor.getString(cursor.getColumnIndex(C_CREATED_AT)));
+					event.put(Event.M_NAME, cursor.getString(cursor.getColumnIndex(C_NAME)));
+					event.put(Event.M_DESCRIPTION, cursor.getString(cursor.getColumnIndex(C_DESCRIPTION)));
+					event.put(Event.M_TIME, cursor.getString(cursor.getColumnIndex(C_TIME)));
+					event.put(Event.M_DURATION, cursor.getString(cursor.getColumnIndex(C_DURATION)));
+					event.put(Event.M_HOST_NAME, cursor.getString(cursor.getColumnIndex(C_HOST_NAME)));
+					event.put(Event.M_LOCATION, cursor.getString(cursor.getColumnIndex(C_LOCATION)));
 				}
 			} finally {
 				cursor.close();

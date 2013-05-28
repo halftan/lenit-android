@@ -8,6 +8,7 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.ContentValues;
 import android.util.Log;
 
 public class Event {
@@ -21,8 +22,6 @@ public class Event {
 	public static final String M_TIME = "time";
 	public static final String M_HOST_NAME = "hostName";
 	public static final String M_URL = "url";
-	
-	//TODO: location
 	public static final String M_LOCATION = "location";
 
 	public int id;
@@ -33,9 +32,9 @@ public class Event {
 	public int duration;
 	public Date time;
 	public String hostName;
-	public String url;
+//	public String url;
 	
-	public static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+	public static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 	
 	public Event(JSONObject obj) {
 		try {
@@ -46,7 +45,8 @@ public class Event {
 			this.duration = obj.getInt(M_DURATION);
 			this.time = format.parse(obj.getString(M_TIME));
 			this.hostName = obj.getString(M_HOST_NAME);
-			this.url = obj.getString((M_URL));
+			this.location = obj.getString(M_LOCATION);
+//			this.url = obj.getString((M_URL));
 		} catch (JSONException e) {
 			Log.e(TAG, "JSON: " + e.getMessage());
 		} catch (ParseException e) {
@@ -57,6 +57,20 @@ public class Event {
 	
 	public Event(Map<String, String> vals) {
 		this(new JSONObject(vals));
+	}
+	
+	public static ContentValues toContentValues(JSONObject from) {
+		ContentValues values = new ContentValues();
+		values.clear();
+		values.put(EventData.C_ID, from.optInt(M_ID));
+		values.put(EventData.C_CREATED_AT, from.optString(M_CREATED_AT));
+		values.put(EventData.C_NAME, from.optString(M_NAME));
+		values.put(EventData.C_DESCRIPTION, from.optString(M_DESCRIPTION));
+		values.put(EventData.C_DURATION, from.optString(M_DURATION));
+		values.put(EventData.C_TIME, from.optString(M_TIME));
+		values.put(EventData.C_HOST_NAME, from.optString(M_HOST_NAME));
+		values.put(EventData.C_LOCATION, from.optString(M_LOCATION));
+		return values;
 	}
 
 }

@@ -16,7 +16,7 @@
         android:textSize="18sp"
         android:textColor="#ff33b5e5" />
     
-    <View style="@style/separator" 
+    <View style="@style/separator_horizontal" 
         android:layout_marginTop="10dp"/>
     
     <EditText

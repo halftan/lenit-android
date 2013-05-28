@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/event_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|left"
+            android:scrollHorizontally="true"
+            android:text="活动活动"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:singleLine="true"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/event_time"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|right"
+            android:minWidth="@dimen/event_row_attr_width"
+            android:singleLine="true"
+            android:text="03月12日 12:23"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="normal"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/event_row_margin" >
+
+        <TextView
+            android:id="@+id/event_label_host"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/event_row_host"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="italic"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            android:id="@+id/event_host"
+            android:layout_width="@dimen/event_row_attr_width"
+            android:layout_height="match_parent"
+            android:text="某某某"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:gravity="left"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/event_label_host" />
+
+        <TextView
+            android:id="@+id/event_label_location"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/event_row_location"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="italic"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/event_host" />
+
+        <TextView
+            android:id="@+id/event_location"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="哪里哪里"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/event_label_location" />
+
+    </RelativeLayout>
+
+</LinearLayout>

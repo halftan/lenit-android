@@ -24,6 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.azusasoft.lenit.PrefsActivity"></activity>
+        <service android:name=".http.FetchService" android:label="@string/service_name"></service>
     </application>
     
 
