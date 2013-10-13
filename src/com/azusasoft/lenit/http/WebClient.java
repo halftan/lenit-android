@@ -24,7 +24,7 @@ import com.loopj.android.http.RequestParams;
 public class WebClient {
 	public static final String TAG = "WebService";
 	
-	private static final String BASE_URL = "http://192.168.244.136:3000";
+	private static final String BASE_URL = "http://192.168.1.100:3000";
 	private static String userAgent = "Lenit-Application-Client";
 	public static String apiRoot = BASE_URL + "/api";
 	public static String apiSession = "/sessions";

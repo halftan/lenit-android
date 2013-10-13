@@ -15,10 +15,6 @@
                android:layout_weight="1"
                android:drawSelectorOnTop="false"/>
 
-     <TextView android:id="@id/android:empty"
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:text="No data"/>
       <Button
         android:id="@+id/button_test"
         android:layout_width="wrap_content"
